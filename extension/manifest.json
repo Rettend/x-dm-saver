@@ -1,0 +1,30 @@
+{
+  "manifest_version": 3,
+  "name": "x-dm-saver",
+  "version": "0.0.1",
+  "description": "save twitter dm's input to local storage",
+  "icons": {
+    "16": "./logo.png",
+    "48": "./logo.png",
+    "128": "./logo.png"
+  },
+  "permissions": [
+    "storage"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://x.com/*"
+      ],
+      "js": [
+        "index.js"
+      ]
+    }
+  ],
+  "action": {
+    "default_icon": "./logo.png"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  }
+}

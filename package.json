@@ -1,0 +1,39 @@
+{
+  "name": "x-dm-saver",
+  "type": "module",
+  "version": "0.0.1",
+  "packageManager": "bun@1.1.17",
+  "description": "save twitter dm's input to local storage",
+  "author": "Rettend",
+  "license": "MIT",
+  "module": "index.ts",
+  "scripts": {
+    "build": "bun pre && unbuild",
+    "build:firefox": "FIREFOX=true bun pre && unbuild",
+    "dev": "bun pre && unbuild --stub",
+    "pre": "bun scripts/index.ts",
+    "bundle": "web-ext build --source-dir dist --artifacts-dir zip --overwrite-dest",
+    "bundle:firefox": "web-ext build --source-dir dist --artifacts-dir zip/firefox --overwrite-dest",
+    "lint": "eslint . --fix",
+    "typecheck": "tsc --noEmit",
+    "release": "bumpp && bun build && bun bundle && bun build:firefox && bun bundle:firefox"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^2.21.1",
+    "@types/bun": "latest",
+    "@types/chrome": "^0.0.268",
+    "@types/lodash-es": "^4.17.12",
+    "@types/webextension-polyfill": "^0.10.7",
+    "bumpp": "^9.4.1",
+    "eslint": "^9.5.0",
+    "kolorist": "^1.8.0",
+    "unbuild": "^2.0.0",
+    "web-ext": "^8.2.0",
+    "webextension-polyfill": "^0.12.0"
+  }
+}
