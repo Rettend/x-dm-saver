@@ -8,6 +8,7 @@ function debounce<F extends (...args: any[]) => any>(func: F, wait: number): (..
     }, wait)
   }
 }
+const debouncedSave = debounce(saveDraft, 500)
 
 let isProgrammaticChange = false
 let draftLoaded = false
@@ -20,10 +21,11 @@ function saveDraft(text: string) {
   })
 }
 
-const debouncedSave = debounce(saveDraft, 500)
-
 function setInputValue(element: HTMLElement, value: string) {
   isProgrammaticChange = true
+
+  // replace any new lines (since they break the input) with spaces
+  value = value.replace(/\n/g, ' ')
 
   // simulate user typing
   element.focus()
