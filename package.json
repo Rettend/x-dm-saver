@@ -1,7 +1,7 @@
 {
   "name": "x-dm-saver",
   "type": "module",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "packageManager": "bun@1.1.17",
   "description": "save twitter dm's input to local storage",
   "author": "Rettend",
