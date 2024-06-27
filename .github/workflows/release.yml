@@ -24,7 +24,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18.x
-          cache: bun
+          # cache: bun # no support for bun yet :'(
 
       - run: bunx changelogithub
         env:

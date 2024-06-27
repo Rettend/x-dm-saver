@@ -8,15 +8,15 @@
   "license": "MIT",
   "module": "index.ts",
   "scripts": {
-    "build": "bun pre && unbuild",
-    "build:firefox": "FIREFOX=true bun pre && unbuild",
-    "dev": "bun pre && unbuild --stub",
+    "build": "bun run pre && unbuild",
+    "build:firefox": "FIREFOX=true bun run pre && unbuild",
+    "dev": "bun run pre && unbuild --stub",
     "pre": "bun scripts/index.ts",
     "bundle": "web-ext build --source-dir dist --artifacts-dir zip --overwrite-dest",
     "bundle:firefox": "web-ext build --source-dir dist --artifacts-dir zip/firefox --overwrite-dest",
     "lint": "eslint . --fix",
     "typecheck": "tsc --noEmit",
-    "release": "bumpp && bun build && bun bundle && bun build:firefox && bun bundle:firefox"
+    "release": "bumpp && bun run build && bun run bundle && bun run build:firefox && bun run bundle:firefox"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"

@@ -1,7 +1,7 @@
 {
-  "manifest_version": 3,
+  "manifest_version": 2,
   "name": "x-dm-saver",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "save twitter dm's input to local storage",
   "icons": {
     "16": "./logo.png",
@@ -21,10 +21,13 @@
       ]
     }
   ],
-  "action": {
+  "browser_action": {
     "default_icon": "./logo.png"
   },
-  "content_security_policy": {
-    "extension_pages": "script-src 'self'; object-src 'self'"
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "x@savedm.com",
+      "strict_min_version": "48.0"
+    }
   }
 }
