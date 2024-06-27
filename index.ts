@@ -9,6 +9,8 @@ function debounce<F extends (...args: any[]) => any>(func: F, wait: number): (..
   }
 }
 
+let isProgrammaticChange = false
+
 function saveDraft(text: string) {
   const cleanedText = text.trim() === 'Start a new message' ? '' : text.trim()
 
@@ -20,12 +22,18 @@ function saveDraft(text: string) {
 const debouncedSave = debounce(saveDraft, 500)
 
 function setInputValue(element: HTMLElement, value: string) {
+  isProgrammaticChange = true
+
   // simulate user typing
   element.focus()
+  // document.execCommand('selectAll', false, undefined)
+  // document.execCommand('delete', false, undefined)
   document.execCommand('insertText', false, value)
 
   const inputEvent = new Event('input', { bubbles: true, cancelable: true })
   element.dispatchEvent(inputEvent)
+
+  setTimeout(() => isProgrammaticChange = false, 100)
 }
 
 function loadDraft(editorContainer: HTMLElement) {
@@ -51,14 +59,18 @@ function loadDraft(editorContainer: HTMLElement) {
   })
 }
 
+let currentObserver: MutationObserver | null = null
+
 function attachListener() {
   const editorContainer = document.querySelector<HTMLElement>('[data-testid="dmComposerTextInputRichTextInputContainer"]')
   if (editorContainer) {
     console.log('Editor container found:', editorContainer)
 
     const observer = new MutationObserver(() => {
-      const text = editorContainer.textContent?.trim() || ''
-      debouncedSave(text)
+      if (!isProgrammaticChange) {
+        const text = editorContainer.textContent?.trim() || ''
+        debouncedSave(text)
+      }
     })
 
     observer.observe(editorContainer, {
@@ -68,12 +80,21 @@ function attachListener() {
     })
 
     loadDraft(editorContainer)
+
+    // disconnect previous observer if exists
+    if (currentObserver) {
+      currentObserver.disconnect()
+    }
+
+    // set current observer
+    currentObserver = observer
   }
   else {
     console.log('Editor container not found, retrying...')
-    setTimeout(attachListener, 1000)
   }
 }
+
+let domObserver: MutationObserver | null = null
 
 function monitorDomChanges() {
   const targetNode = document.body
@@ -82,16 +103,21 @@ function monitorDomChanges() {
     subtree: true,
   }
 
-  const observerCallback = (mutationsList: MutationRecord[]) => {
+  if (domObserver) {
+    domObserver.disconnect()
+  }
+
+  const observerCallback = debounce((mutationsList: MutationRecord[]) => {
     for (const mutation of mutationsList) {
       if (mutation.type === 'childList') {
         attachListener()
+        break
       }
     }
-  }
+  }, 500)
 
-  const observer = new MutationObserver(observerCallback)
-  observer.observe(targetNode, observerOptions)
+  domObserver = new MutationObserver(observerCallback)
+  domObserver.observe(targetNode, observerOptions)
 }
 
 function initExtension() {
