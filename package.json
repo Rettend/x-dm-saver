@@ -21,8 +21,6 @@
   "peerDependencies": {
     "typescript": "^5.0.0"
   },
-  "dependencies": {
-  },
   "devDependencies": {
     "@antfu/eslint-config": "^2.21.1",
     "@types/bun": "latest",

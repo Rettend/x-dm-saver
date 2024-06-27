@@ -10,6 +10,7 @@ function debounce<F extends (...args: any[]) => any>(func: F, wait: number): (..
 }
 
 let isProgrammaticChange = false
+let draftLoaded = false
 
 function saveDraft(text: string) {
   const cleanedText = text.trim() === 'Start a new message' ? '' : text.trim()
@@ -26,8 +27,6 @@ function setInputValue(element: HTMLElement, value: string) {
 
   // simulate user typing
   element.focus()
-  // document.execCommand('selectAll', false, undefined)
-  // document.execCommand('delete', false, undefined)
   document.execCommand('insertText', false, value)
 
   const inputEvent = new Event('input', { bubbles: true, cancelable: true })
@@ -37,6 +36,9 @@ function setInputValue(element: HTMLElement, value: string) {
 }
 
 function loadDraft(editorContainer: HTMLElement) {
+  if (draftLoaded)
+    return
+
   chrome.storage.local.get(['xDMDraft'], (result: { xDMDraft?: string }) => {
     if (result.xDMDraft) {
       try {
@@ -46,6 +48,7 @@ function loadDraft(editorContainer: HTMLElement) {
           setTimeout(() => {
             setInputValue(inputElement, result.xDMDraft || '')
             console.log('Loaded draft:', result.xDMDraft)
+            draftLoaded = true
           }, 100)
         }
         else {
